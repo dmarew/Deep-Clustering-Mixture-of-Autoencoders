@@ -9,19 +9,19 @@ def train_autoencoder(autoencoder, optimizer, criterion, data_loader, number_of_
 
         running_loss = 0.0
         autoencoder.train()
-        for batch_index, (in_images, labels) in enumerate(data_loader):
+        for batch_index, (in_images, aspect_image) in enumerate(data_loader):
 
             in_images = to_var(in_images)
             out_images = autoencoder(in_images)
 
-            loss = criterion(out_images, in_images)
+            loss = criterion(out_images, aspect_image)
 
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
             running_loss += loss.data.numpy()
             if batch_index % 100==0 and verbose:
-                print('epoch %d loss: %.5f batch: %d' % (epoch, running_loss/((batch_index + 1)), (batch_index + 1)*batch_size))
+                print('epoch %d loss: %.5f' % (epoch, running_loss/((batch_index + 1))))
             if batch_index != 0 and batch_index % 1000 == 0:
                 break
     print('Done training %s'%(name))
